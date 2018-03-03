@@ -1,7 +1,7 @@
 .container {
     display: flex;
+    flex-direction: column;
 }
 .row-container {
     display: flex;
-    flex-direction: column;
 }
