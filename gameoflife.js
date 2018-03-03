@@ -19,10 +19,14 @@ var createGridItem = function(currentRow, currentColumn, isAlive) {
 
 }
 var world = [
-    [false, false, false, false],
-    [false, true, true, true],
-    [true, true, true, false],
-    [false, false, false, false]
+    [false, false, false, false, false, false, false, false, false, false, false],
+    [false, true, true, true, false, false, false, false, true, false, false],
+    [true, true, true, false, false, false, false, false, false, true, false],
+    [false, false, false, false, false, false, false, true, true, true, false],
+    [false, false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false, false],
+    [true, true, true, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false, false]
 ]
 
 var neighborsAlive = function (seed, myRow, myColumn) {
