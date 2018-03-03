@@ -16,10 +16,13 @@ body {
 .row-container {
     display: flex;
     justify-content: space-around;
+    flex-basis: 10%;
 }
 div[data-is-alive="true"] {
     background-color: black;
+    flex-basis: 10%;
 }
 div[data-is-alive="false"]  {
     background-color: purple;
+    flex-basis: 10%;
 }

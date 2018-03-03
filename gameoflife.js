@@ -18,22 +18,11 @@ var createGridItem = function(currentRow, currentColumn, isAlive) {
     });
 
 }
-var renderItems = function() {
-    var allItems = document.getElementsByClassName('item');
-    Array.prototype.forEach.call(allItems, (function(element){
-        if (element.getAttribute('data-is-alive') === 'true') {
-            element.textContent = 'true';
-        }
-        else {
-            element.textContent = 'false';
-        };
-    })
-    )}
-
 var world = [
-    [false, false, false],
-    [true, true, true],
-    [false, false, false],
+    [false, false, false, false],
+    [false, true, true, true],
+    [true, true, true, false],
+    [false, false, false, false]
 ]
 
 var neighborsAlive = function (seed, myRow, myColumn) {
@@ -77,7 +66,6 @@ var gameOfLife = function(seed) {
             }
         }
     }
-    renderItems();
     world = newWorld;
     return world;
 }
