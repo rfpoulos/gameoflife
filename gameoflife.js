@@ -56,23 +56,29 @@ var gameOfLife = function(seed) {
     var newWorld = [];
     for (var row = 0; row < seed.length; row++) {
         createGridRow(row);
+        newWorld.push([]);
         for (var column = 0; column < seed[0].length; column++) {
             if (seed[row][column] === true) {
                 if (neighborsAlive(seed, row, column) === 2 || neighborsAlive(seed, row, column) === 3) {
                     createGridItem(row, column, true);
+                    newWorld[row].push(true);
                 } else {
                     createGridItem(row, column, false);
+                    newWorld[row].push(false);
                 }    
             } else {
                 if (neighborsAlive(seed, row, column) === 3){
                     createGridItem(row, column, true);
+                    newWorld[row].push(true);
                 } else {
                     createGridItem(row, column, false);
+                    newWorld[row].push(false);
                 }
             }
         }
     }
-    renderItems()
+    renderItems();
+    return newWorld;
 }
 
 gameOfLife(world);
