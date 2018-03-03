@@ -18,17 +18,25 @@ var createGridItem = function(currentRow, currentColumn, isAlive) {
     });
 
 }
-var world = [
-    [false, false, false, false, false, false, false, false, false, false, false],
-    [false, true, true, true, false, false, false, false, true, false, false],
-    [true, true, true, false, false, false, false, false, false, true, false],
-    [false, false, false, false, false, false, false, true, true, true, false],
-    [false, false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false, false],
-    [true, true, true, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false, false]
-]
+var randomWorld = function(numRows, numCols) {
+    startArray = [];
+    var coinFlip = null;
+    for (var i = 0; i < numRows; i++) {
+        startArray.push([]);
+        for (var j = 0; j < numCols; j++) {
+            coinFlip = Math.round(Math.random());
+            if (coinFlip === 0){
+                startArray[i].push(true);
+            }
+            else {
+                startArray[i].push(false);
+            }
+        }
+    }
+    return startArray;
+}
 
+world = randomWorld(15, 15);
 var neighborsAlive = function (seed, myRow, myColumn) {
     var myself = seed[myRow][myColumn];
     var aliveCount = 0;
