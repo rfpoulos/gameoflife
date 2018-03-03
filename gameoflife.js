@@ -31,10 +31,9 @@ var renderItems = function() {
     )}
 
 var world = [
-    [false, false, false, true, true],
-    [true, true, true, true, true],
-    [false, false, false, true, true],
-    [false, false, false, false, true]
+    [false, false, false],
+    [true, true, true],
+    [false, false, false],
 ]
 
 var neighborsAlive = function (seed, myRow, myColumn) {
@@ -79,7 +78,11 @@ var gameOfLife = function(seed) {
         }
     }
     renderItems();
-    return newWorld;
+    world = newWorld;
+    return world;
 }
 
-gameOfLife(world);
+container.addEventListener('click', function(){
+    container.innerHTML = "";
+    gameOfLife(world);
+});
