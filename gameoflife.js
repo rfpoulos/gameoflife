@@ -1,7 +1,32 @@
+var container = document.querySelector('.container');
+
+var createGridRow = function(currentRow) {
+    var row = document.createElement('div');
+    row.setAttribute('data-row-index', currentRow)
+    row.classList.add('row-container');
+    container.appendChild(row);
+  };
+var createGridItem = function(currentRow, currentColumn, isAlive) {
+    var item = document.createElement('div');
+    item.setAttribute('data-is-alive', isAlive);
+    item.classList.add('item');
+    var whichRow = document.getElementsByClassName('row-container');
+    Array.prototype.forEach.call(whichRow, function(element){
+        if (element.getAttribute('data-row-index') === currentRow.toString()) {
+            element.appendChild(item);
+        };
+    });
+
+}
 var world = [
-    [false, false, false, true],
-    [true, true, true, true],
-    [false, false, false, true]
+    [false, false, false, false, false, false, false, false, false, false, false],
+    [false, true, true, true, false, false, false, false, true, false, false],
+    [true, true, true, false, false, false, false, false, false, true, false],
+    [false, false, false, false, false, false, false, true, true, true, false],
+    [false, false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false, false],
+    [true, true, true, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false, false]
 ]
 
 var neighborsAlive = function (seed, myRow, myColumn) {
@@ -23,24 +48,33 @@ var neighborsAlive = function (seed, myRow, myColumn) {
 var gameOfLife = function(seed) {
     var newWorld = [];
     for (var row = 0; row < seed.length; row++) {
+        createGridRow(row);
         newWorld.push([]);
         for (var column = 0; column < seed[0].length; column++) {
             if (seed[row][column] === true) {
                 if (neighborsAlive(seed, row, column) === 2 || neighborsAlive(seed, row, column) === 3) {
+                    createGridItem(row, column, true);
                     newWorld[row].push(true);
                 } else {
+                    createGridItem(row, column, false);
                     newWorld[row].push(false);
                 }    
             } else {
                 if (neighborsAlive(seed, row, column) === 3){
+                    createGridItem(row, column, true);
                     newWorld[row].push(true);
                 } else {
+                    createGridItem(row, column, false);
                     newWorld[row].push(false);
                 }
             }
         }
     }
-    return newWorld;
+    world = newWorld;
+    return world;
 }
 
-console.log(gameOfLife(world));
+container.addEventListener('click', function(){
+    container.innerHTML = "";
+    gameOfLife(world);
+});
