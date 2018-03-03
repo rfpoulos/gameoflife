@@ -21,10 +21,10 @@ body {
 div[data-is-alive="true"] {
     background-color: black;
     flex-grow: 1;
-    margin: .5em;
+    /* margin: .01em; */
 }
 div[data-is-alive="false"]  {
     background-color: purple;
     flex-grow: 1;
-    margin: .5em;
+    /* margin: .01em; */
 }

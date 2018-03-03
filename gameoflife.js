@@ -36,7 +36,7 @@ var randomWorld = function(numRows, numCols) {
     return startArray;
 }
 
-world = randomWorld(15, 15);
+world = randomWorld(100, 100);
 var neighborsAlive = function (seed, myRow, myColumn) {
     var myself = seed[myRow][myColumn];
     var aliveCount = 0;
@@ -82,7 +82,8 @@ var gameOfLife = function(seed) {
     return world;
 }
 
-container.addEventListener('click', function(){
+
+setInterval(function(){
     container.innerHTML = "";
     gameOfLife(world);
-});
+ }, 500);
