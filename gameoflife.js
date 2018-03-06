@@ -17,7 +17,7 @@ var randomWorld = function(numRows, numCols) {
     }
     return startArray;
 }
-world = randomWorld(50, 100);
+world = randomWorld(100, 100);
 var gameOfLife = function(seed) {
     var newWorld = [];
     for (var row = 0; row < seed.length; row++) {
@@ -28,21 +28,17 @@ var gameOfLife = function(seed) {
                 if (neighborsAlive(seed, row, column) === (2 || 3)) {
                     createGridItem(row, column, true);
                     newWorld[row].push(true);
-                } else {
-                    createGridItem(row, column, false);
-                    newWorld[row].push(false);
-                }    
-            } else {
-                if (neighborsAlive(seed, row, column) === 3){
+                    continue;
+                }; 
+            } else if (neighborsAlive(seed, row, column) === 3){
                     createGridItem(row, column, true);
                     newWorld[row].push(true);
-                } else {
-                    createGridItem(row, column, false);
-                    newWorld[row].push(false);
-                }
+                    continue;
+                };
+                createGridItem(row, column, false);
+                newWorld[row].push(false);
             }
         }
-    }
     world = newWorld;
     return world;
 }
