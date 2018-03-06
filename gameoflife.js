@@ -1,4 +1,10 @@
-var container = document.querySelector('.container');
+var container = document.body;
+
+var createBoardContainer = function() {
+    var board = document.createElement('div');
+    board.classList.add('container');
+    return board;
+};
 
 var randomWorld = function(numRows, numCols) {
     startArray = [];
@@ -17,30 +23,33 @@ var randomWorld = function(numRows, numCols) {
     }
     return startArray;
 }
-world = randomWorld(100, 100);
+world = randomWorld(150, 150);
 var gameOfLife = function(seed) {
+    var boardContainer = createBoardContainer();
     var newWorld = [];
     for (var row = 0; row < seed.length; row++) {
-        createGridRow(row);
+        var rowDom = createGridRow(row);
+
         newWorld.push([]);
         for (var column = 0; column < seed[0].length; column++) {
             if (seed[row][column] === true) {
                 if (neighborsAlive(seed, row, column) === (2 || 3)) {
-                    createGridItem(row, column, true);
+                    createGridItem(rowDom, column, true);
                     newWorld[row].push(true);
                     continue;
                 }; 
             } else if (neighborsAlive(seed, row, column) === 3){
-                    createGridItem(row, column, true);
+                    createGridItem(rowDom, column, true);
                     newWorld[row].push(true);
                     continue;
                 };
-                createGridItem(row, column, false);
+                createGridItem(rowDom, column, false);
                 newWorld[row].push(false);
             }
+            boardContainer.appendChild(rowDom);
         }
     world = newWorld;
-    return world;
+    return boardContainer;
 }
 var neighborsAlive = function (seed, myRow, myColumn) {
     var myself = seed[myRow][myColumn];
@@ -62,22 +71,18 @@ var createGridRow = function(currentRow) {
     var row = document.createElement('div');
     row.setAttribute('data-row-index', currentRow)
     row.classList.add('row-container');
-    container.appendChild(row);
+    return row;
   };
-var createGridItem = function(currentRow, currentColumn, isAlive) {
+var createGridItem = function(rowDom, currentColumn, isAlive) {
     var item = document.createElement('div');
     item.setAttribute('data-is-alive', isAlive);
     item.classList.add('item');
-    var whichRow = document.getElementsByClassName('row-container');
-    Array.prototype.forEach.call(whichRow, function(element){
-        if (element.getAttribute('data-row-index') === currentRow.toString()) {
-            element.appendChild(item);
-        };
-    });
+    rowDom.appendChild(item);
 
 }
 
 setInterval(function(){
-    container.innerHTML = "";
-    gameOfLife(world);
- }, 500);
+    var board = gameOfLife(world);
+    container.removeChild(document.querySelector('.container'));
+    container.appendChild(board);
+ }, 100);
