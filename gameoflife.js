@@ -1,30 +1,12 @@
 var container = document.querySelector('.container');
 
-var createGridRow = function(currentRow) {
-    var row = document.createElement('div');
-    row.setAttribute('data-row-index', currentRow)
-    row.classList.add('row-container');
-    container.appendChild(row);
-  };
-var createGridItem = function(currentRow, currentColumn, isAlive) {
-    var item = document.createElement('div');
-    item.setAttribute('data-is-alive', isAlive);
-    item.classList.add('item');
-    var whichRow = document.getElementsByClassName('row-container');
-    Array.prototype.forEach.call(whichRow, function(element){
-        if (element.getAttribute('data-row-index') === currentRow.toString()) {
-            element.appendChild(item);
-        };
-    });
-
-}
 var randomWorld = function(numRows, numCols) {
     startArray = [];
     var coinFlip = null;
     for (var i = 0; i < numRows; i++) {
         startArray.push([]);
         for (var j = 0; j < numCols; j++) {
-            coinFlip = Math.round(Math.random());
+            var coinFlip = Math.round(Math.random());
             if (coinFlip === 0){
                 startArray[i].push(true);
             }
@@ -35,24 +17,7 @@ var randomWorld = function(numRows, numCols) {
     }
     return startArray;
 }
-
-world = randomWorld(100, 100);
-var neighborsAlive = function (seed, myRow, myColumn) {
-    var myself = seed[myRow][myColumn];
-    var aliveCount = 0;
-    for (var currentRow = Math.max(0, myRow - 1); currentRow < Math.min(seed.length, myRow + 2); currentRow++) {
-        for (var currentColumn = Math.max(0, myColumn - 1); currentColumn < Math.min(seed[0].length, myColumn + 2); currentColumn++) {
-            if (seed[currentRow][currentColumn] === true){
-                aliveCount++;
-            };
-        };
-    };
-    if (myself === true) {
-        aliveCount -= 1;
-    }
-    return aliveCount;
-};
-
+world = randomWorld(50, 100);
 var gameOfLife = function(seed) {
     var newWorld = [];
     for (var row = 0; row < seed.length; row++) {
@@ -60,7 +25,7 @@ var gameOfLife = function(seed) {
         newWorld.push([]);
         for (var column = 0; column < seed[0].length; column++) {
             if (seed[row][column] === true) {
-                if (neighborsAlive(seed, row, column) === 2 || neighborsAlive(seed, row, column) === 3) {
+                if (neighborsAlive(seed, row, column) === (2 || 3)) {
                     createGridItem(row, column, true);
                     newWorld[row].push(true);
                 } else {
@@ -81,7 +46,40 @@ var gameOfLife = function(seed) {
     world = newWorld;
     return world;
 }
+var neighborsAlive = function (seed, myRow, myColumn) {
+    var myself = seed[myRow][myColumn];
+    var aliveCount = 0;
+    for (var currentRow = Math.max(0, myRow - 1); currentRow < Math.min(seed.length, myRow + 2); currentRow++) {
+        for (var currentColumn = Math.max(0, myColumn - 1); currentColumn < Math.min(seed[0].length, myColumn + 2); currentColumn++) {
+            if (seed[currentRow][currentColumn] === true){
+                aliveCount++;
+            };
+        };
+    };
+    if (myself === true) {
+        aliveCount -= 1;
+    }
+    return aliveCount;
+};
 
+var createGridRow = function(currentRow) {
+    var row = document.createElement('div');
+    row.setAttribute('data-row-index', currentRow)
+    row.classList.add('row-container');
+    container.appendChild(row);
+  };
+var createGridItem = function(currentRow, currentColumn, isAlive) {
+    var item = document.createElement('div');
+    item.setAttribute('data-is-alive', isAlive);
+    item.classList.add('item');
+    var whichRow = document.getElementsByClassName('row-container');
+    Array.prototype.forEach.call(whichRow, function(element){
+        if (element.getAttribute('data-row-index') === currentRow.toString()) {
+            element.appendChild(item);
+        };
+    });
+
+}
 
 setInterval(function(){
     container.innerHTML = "";
