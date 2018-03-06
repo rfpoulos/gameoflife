@@ -6,6 +6,26 @@ var createBoardContainer = function() {
     return board;
 };
 
+var createBoardDOM = function(world) {
+    return world.map(function(row) {
+        return row.map(function(isAlive) {
+            return createGridItem(isAlive);
+        });
+    });
+};
+
+var createBoardFromWorld = function(world, boardContainer) {
+    var domNodes = createBoardDOM(world);
+    domNodes.forEach(function(row) {
+        var rowDom = createGridRow(row);
+        row.forEach(function(cell) {
+            rowDom.appendChild(cell);
+        });
+        boardContainer.appendChild(rowDom);
+    });
+    return domNodes;
+};
+
 var randomWorld = function(numRows, numCols) {
     startArray = [];
     var coinFlip = null;
@@ -23,33 +43,28 @@ var randomWorld = function(numRows, numCols) {
     }
     return startArray;
 }
-world = randomWorld(150, 150);
+
 var gameOfLife = function(seed) {
-    var boardContainer = createBoardContainer();
     var newWorld = [];
     for (var row = 0; row < seed.length; row++) {
-        var rowDom = createGridRow(row);
-
         newWorld.push([]);
         for (var column = 0; column < seed[0].length; column++) {
             if (seed[row][column] === true) {
                 if (neighborsAlive(seed, row, column) === (2 || 3)) {
-                    createGridItem(rowDom, column, true);
+                    updateGridItem(worldDOM, row, column, true);
                     newWorld[row].push(true);
                     continue;
                 }; 
             } else if (neighborsAlive(seed, row, column) === 3){
-                    createGridItem(rowDom, column, true);
+                    updateGridItem(worldDOM, row, column, true);
                     newWorld[row].push(true);
                     continue;
                 };
-                createGridItem(rowDom, column, false);
+                updateGridItem(worldDOM, row, column, false);
                 newWorld[row].push(false);
             }
-            boardContainer.appendChild(rowDom);
         }
     world = newWorld;
-    return boardContainer;
 }
 var neighborsAlive = function (seed, myRow, myColumn) {
     var myself = seed[myRow][myColumn];
@@ -67,22 +82,27 @@ var neighborsAlive = function (seed, myRow, myColumn) {
     return aliveCount;
 };
 
-var createGridRow = function(currentRow) {
+var updateGridItem = function(worldDOM, row, column, isAlive) {
+    var item = worldDOM[row][column];
+    item.setAttribute('data-is-alive', isAlive);
+};
+var createGridRow = function() {
     var row = document.createElement('div');
-    row.setAttribute('data-row-index', currentRow)
     row.classList.add('row-container');
     return row;
   };
-var createGridItem = function(rowDom, currentColumn, isAlive) {
+var createGridItem = function(isAlive) {
     var item = document.createElement('div');
     item.setAttribute('data-is-alive', isAlive);
     item.classList.add('item');
-    rowDom.appendChild(item);
-
+    return item;
 }
 
+world = randomWorld(150, 150);
+var boardContainer = createBoardContainer();
+var worldDOM = createBoardFromWorld(world, boardContainer);
+container.appendChild(boardContainer);
+
 setInterval(function(){
-    var board = gameOfLife(world);
-    container.removeChild(document.querySelector('.container'));
-    container.appendChild(board);
- }, 100);
+    gameOfLife(world);
+ }, 30);
